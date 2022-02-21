@@ -31,10 +31,10 @@ export const toggleRaceCategory =
 
 export const getNextRaceList = (): AppThunk => async dispatch => {
   const response = await raceApi.getNextRaceList(5);
-  const { nextToGoIds, raceSummaries } = response;
+  const { next_to_go_ids, race_summaries } = response;
 
   const raceInOrder: RaceInfo[] = [];
-  nextToGoIds.forEach(id => raceInOrder.push(raceSummaries[id]));
+  next_to_go_ids.forEach(id => raceInOrder.push(race_summaries[id]));
 
   dispatch(updateRaceList(raceInOrder));
 };

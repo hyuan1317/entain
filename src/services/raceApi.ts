@@ -1,13 +1,12 @@
 import axios from 'axios';
-import keysToCamel from '../utils/keysToCamel';
 
 interface IRaceApi {
   getNextRaceList: (num: number) => Promise<NextToGoData>;
 }
 
 export interface NextToGoData {
-  nextToGoIds: string[];
-  raceSummaries: RaceSummary;
+  next_to_go_ids: string[];
+  race_summaries: RaceSummary;
 }
 
 export enum RaceCategoryId {
@@ -21,46 +20,46 @@ interface RaceSummary {
 }
 
 export interface RaceInfo {
-  raceId: string;
-  raceName: string;
-  raceNumber: number;
-  meetingId: string;
-  meetingName: string;
-  categoryId: RaceCategoryId;
-  advertisedStart: {
+  race_id: string;
+  race_name: string;
+  race_number: number;
+  meeting_id: string;
+  meeting_name: string;
+  category_id: RaceCategoryId;
+  advertised_start: {
     seconds: number;
   };
-  raceForm: {
+  race_form: {
     distance: number;
-    distanceType: {
+    distance_type: {
       id: string;
       name: string;
-      shortName: string;
+      short_name: string;
     };
-    distanceTypeId: string;
-    trackCondition: {
+    distance_type_id: string;
+    track_condition: {
       id: string;
       name: string;
-      shortName: string;
+      short_name: string;
     };
-    trackConditionId: string;
+    track_condition_id: string;
     weather: {
       id: string;
       name: string;
-      shortName: string;
-      iconUri: string;
+      short_name: string;
+      icon_uri: string;
     };
-    weatherId: string;
-    raceComment: string;
-    additionalData: string;
+    weather_id: string;
+    race_comment: string;
+    additional_data: string;
     generated: number;
-    silkBaseUrl: string;
-    raceCommentAlternative: string;
+    silk_base_url: string;
+    race_comment_alternative: string;
   };
-  venueId: string;
-  venueName: string;
-  venueState: string;
-  venueCountry: string;
+  venue_id: string;
+  venue_name: string;
+  venue_dtate: string;
+  venue_country: string;
 }
 
 const raceApi: IRaceApi = {
@@ -68,7 +67,7 @@ const raceApi: IRaceApi = {
     const response = await axios.get(
       `https://api.neds.com.au/rest/v1/racing/?method=nextraces&count=${num}`,
     );
-    const raceList = keysToCamel(response.data);
+    const raceList = response.data.data;
     return raceList;
   },
 };
