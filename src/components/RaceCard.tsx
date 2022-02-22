@@ -83,14 +83,13 @@ const RaceCard: FC<Props> = props => {
   // fetch api 1 minute past the start time
   useEffect(() => {
     const triggerTimeRemaining = seconds + 60 - new Date().getTime() / 1000;
-
     if (triggerTimeRemaining <= 0) {
       return;
     }
 
     const fetchCounter = setTimeout(() => {
       dispatch(getNextRaceList());
-    }, triggerTimeRemaining);
+    }, triggerTimeRemaining * 1000);
 
     return () => clearTimeout(fetchCounter);
   }, [seconds, dispatch]);

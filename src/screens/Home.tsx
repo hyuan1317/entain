@@ -9,7 +9,7 @@ import { RaceInfo } from '../services/raceApi';
 
 const Wrapper = styled.View`
   flex: 1;
-  padding: 0 10px;
+  padding: 0 20px;
 `;
 const Title = styled.Text`
   text-align: center;
