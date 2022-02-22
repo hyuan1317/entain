@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { FlatList } from 'react-native';
 import { RootState } from '../../reducers';
 import { getNextRaceList } from '../../actions/race';
-import RaceCard from '../../components/RaceCard';
+import RaceCard from './RaceCard';
 import { RaceInfo } from '../../services/raceApi';
 import CategoryFilter from './CategoryFilter';
 
@@ -27,6 +27,27 @@ const Home: FC = () => {
   useEffect(() => {
     dispatch(getNextRaceList());
   }, [dispatch]);
+
+  // fetch api 1 minute past the start time
+  useEffect(() => {
+    if (raceList.length === 0) {
+      return;
+    }
+
+    const mostRecentRace = raceList[0];
+    const {
+      advertised_start: { seconds },
+    } = mostRecentRace;
+
+    const now = new Date().getTime() / 1000;
+    const triggerTimeRemaining = seconds + 60 - now;
+
+    const fetchCounter = setTimeout(() => {
+      dispatch(getNextRaceList());
+    }, triggerTimeRemaining * 1000);
+
+    return () => clearTimeout(fetchCounter);
+  }, [raceList, dispatch]);
 
   const displayingRaceList = useMemo(() => {
     // none of categories are selected -> show all
