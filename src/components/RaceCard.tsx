@@ -1,5 +1,7 @@
-import React, { FC, useState, useEffect, useMemo } from 'react';
+import React, { FC, useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components/native';
+import { getNextRaceList } from '../actions/race';
 import { RaceInfo } from '../services/raceApi';
 
 interface Props {
@@ -52,6 +54,7 @@ function formatTimeRemaining(seconds: number) {
 }
 
 const RaceCard: FC<Props> = props => {
+  const dispatch = useDispatch();
   const { race } = props;
   const {
     meeting_name,
@@ -59,12 +62,9 @@ const RaceCard: FC<Props> = props => {
     advertised_start: { seconds },
   } = race;
 
-  const initialCountingTime = useMemo(() => {
-    return formatTimeRemaining(seconds);
-  }, [seconds]);
-
-  const [countingTime, setCountingTime] =
-    useState<CountingTimeType>(initialCountingTime);
+  const [countingTime, setCountingTime] = useState<CountingTimeType>(
+    formatTimeRemaining(seconds),
+  );
 
   useEffect(() => {
     const counter = setInterval(() => {
@@ -76,7 +76,24 @@ const RaceCard: FC<Props> = props => {
         setCountingTime(newCountingTime);
       }
     }, 1000);
+
+    return () => clearInterval(counter);
   }, [seconds]);
+
+  // fetch api 1 minute past the start time
+  useEffect(() => {
+    const triggerTimeRemaining = seconds + 60 - new Date().getTime() / 1000;
+
+    if (triggerTimeRemaining <= 0) {
+      return;
+    }
+
+    const fetchCounter = setTimeout(() => {
+      dispatch(getNextRaceList());
+    }, triggerTimeRemaining);
+
+    return () => clearTimeout(fetchCounter);
+  }, [seconds, dispatch]);
 
   return (
     <Wrapper>
