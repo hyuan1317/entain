@@ -9,11 +9,19 @@ export interface NextToGoData {
   race_summaries: RaceSummary;
 }
 
-export enum RaceCategoryId {
-  GREYHOUND = '9daef0d7-bf3c-4f50-921d-8e818c60fe61',
-  HARNESS = '161d9be2-e909-4326-8c2c-35ed71fb460b',
-  Horse = '4a2788f8-e825-4d36-9894-efd4baf1cfae',
+export enum RaceCategoryType {
+  GREYHOUND = 'GREYHOUND',
+  HARNESS = 'HARNESS',
+  HORSE = 'HORSE',
 }
+
+export const raceCategoryId: {
+  [key in RaceCategoryType]?: string;
+} = {
+  [RaceCategoryType.GREYHOUND]: '9daef0d7-bf3c-4f50-921d-8e818c60fe61',
+  [RaceCategoryType.HARNESS]: '161d9be2-e909-4326-8c2c-35ed71fb460b',
+  [RaceCategoryType.HORSE]: '4a2788f8-e825-4d36-9894-efd4baf1cfae',
+};
 
 interface RaceSummary {
   [raceId: string]: RaceInfo;
@@ -25,7 +33,7 @@ export interface RaceInfo {
   race_number: number;
   meeting_id: string;
   meeting_name: string;
-  category_id: RaceCategoryId;
+  category_id: string;
   advertised_start: {
     seconds: number;
   };

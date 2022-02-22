@@ -1,4 +1,4 @@
-import raceApi, { RaceInfo, RaceCategoryId } from '../services/raceApi';
+import raceApi, { RaceInfo } from '../services/raceApi';
 import { AppThunk } from '../store';
 
 export const UPDATE_RACE_LIST = 'UPDATE_RACE_LIST';
@@ -19,7 +19,7 @@ export const updateSelectedRaceCategoryIds = (ids: { [id: string]: boolean }) =>
   } as const);
 
 export const toggleRaceCategory =
-  (raceCategoryId: RaceCategoryId): AppThunk =>
+  (raceCategoryId: string): AppThunk =>
   (dispatch, getState) => {
     const { selectedRaceCategoryIds } = getState().race;
     let newSelectedRaceCategoryIds = { ...selectedRaceCategoryIds };
